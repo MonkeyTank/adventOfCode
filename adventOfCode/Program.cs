@@ -17,18 +17,28 @@ namespace adventOfCode
             StreamReader streamReader = new StreamReader(@"..\..\01\01.txt");
 
             getListFromTxt(streamReader, out inputList);
-            entries = getIntsFromStringList(inputList);            
+            entries = getIntsFromStringList(inputList);
+            int third = 0;
 
-            foreach(int cur in entries)
+            foreach(int first in entries)
             {
-                int dif = 2020 - cur;
-                if (entries.Contains(dif))
+                foreach(int second in entries)
                 {
-                    Console.WriteLine("First value: {0}", cur);
-                    Console.WriteLine("Second value: {0}", dif);
-                    Console.WriteLine("Multiplied: {0}", cur * dif);
-                    break;
+                    if((first + second) < 2020)
+                    {
+                        third = 2020 - first - second;
+                        if (entries.Contains(third)){                            
+                            Console.WriteLine("First value: {0}", first);
+                            Console.WriteLine("Second value: {0}", second);
+                            Console.WriteLine("Third value: {0}", third);
+                            Console.WriteLine("Multiplied: {0}", first * second * third);
+                            break;
+                        }
+                        third = 0;
+                    }
                 }
+                if(third != 0)
+                    break;
             }
 
             Console.ReadLine();
