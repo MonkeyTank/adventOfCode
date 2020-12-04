@@ -12,34 +12,22 @@ namespace adventOfCode
         static void Main(string[] args)
         {
             List<String> inputList;
-            List<int> entries;
+            List<Password> passwords;
+            int cnt = 0;
 
-            StreamReader streamReader = new StreamReader(@"..\..\01\01.txt");
+            StreamReader streamReader = new StreamReader(@"..\..\02\02.txt");
 
             getListFromTxt(streamReader, out inputList);
-            entries = getIntsFromStringList(inputList);
-            int third = 0;
 
-            foreach(int first in entries)
+            passwords = getPasswordsFromInput(inputList);
+            
+            foreach(Password cur in passwords)
             {
-                foreach(int second in entries)
-                {
-                    if((first + second) < 2020)
-                    {
-                        third = 2020 - first - second;
-                        if (entries.Contains(third)){                            
-                            Console.WriteLine("First value: {0}", first);
-                            Console.WriteLine("Second value: {0}", second);
-                            Console.WriteLine("Third value: {0}", third);
-                            Console.WriteLine("Multiplied: {0}", first * second * third);
-                            break;
-                        }
-                        third = 0;
-                    }
-                }
-                if(third != 0)
-                    break;
+                if (cur.valid)
+                    cnt++;
             }
+
+            Console.WriteLine("{0} out of {1} passwords are valid", cnt, passwords.Count());
 
             Console.ReadLine();
         }
@@ -64,5 +52,21 @@ namespace adventOfCode
 
             return result;
         } 
+
+        public static List<Password> getPasswordsFromInput(List<string> inputs)
+        {
+            List<Password> passwords = new List<Password>();
+
+            foreach(string cur in inputs)
+            {
+                string[] conditions = cur.Split(' ');
+                string[] minMax = conditions[0].Split('-');
+
+                Password temp = new Password(Convert.ToInt32(minMax[0]), Convert.ToInt32(minMax[1]), conditions[1][0], conditions[2]);
+                passwords.Add(temp);
+            }
+
+            return passwords;
+        }
     }
 }
