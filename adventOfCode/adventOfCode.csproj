@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Passport.cs" />
     <Compile Include="PasswordTwo.cs" />
     <Compile Include="PasswordOne.cs" />
     <Compile Include="Program.cs" />

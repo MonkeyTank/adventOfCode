@@ -11,43 +11,31 @@ namespace adventOfCode
     {
         static void Main(string[] args)
         {
-            //List<String> inputList;
-            string[] inputArray;
-            int right;
-            int down;
-            
-            StreamReader streamReader = new StreamReader(@"..\..\03\03.txt");
+            List<String> inputList;
+            //string[] inputArray;
+            List<Dictionary<string, string>> inputDicts;
+            int validCnt = 0;
 
-            getArrayFromTxt(streamReader, out inputArray);
+            StreamReader streamReader = new StreamReader(@"..\..\input\04.txt");
 
-            right = 1;
-            down = 1;
-            long treesA = calcSlopes(right, down, inputArray);
-            Console.WriteLine("{0} trees will be encountered with right {1}, down {2}", treesA, right, down);
+            getListFromTxt(streamReader, out inputList);
 
-            right = 3;
-            down = 1;
-            long treesB = calcSlopes(right, down, inputArray);
-            Console.WriteLine("{0} trees will be encountered with right {1}, down {2}", treesB, right, down);
+            inputDicts = getDictionaryListFromStringList(inputList);
 
-            right = 5;
-            down = 1;
-            long treesC = calcSlopes(right, down, inputArray);
-            Console.WriteLine("{0} trees will be encountered with right {1}, down {2}", treesC, right, down);
+            List<Passport> passports = new List<Passport>();
 
-            right = 7;
-            down = 1;
-            long treesD = calcSlopes(right, down, inputArray);
-            Console.WriteLine("{0} trees will be encountered with right {1}, down {2}", treesD, right, down);
+            foreach(Dictionary<string, string> cur in inputDicts)
+            {
+                passports.Add(new Passport(cur));
+            }
 
-            right = 1;
-            down = 2;
-            long treesE = calcSlopes(right, down, inputArray);
-            Console.WriteLine("{0} trees will be encountered with right {1}, down {2}", treesE, right, down);
+            foreach(Passport cur in passports)
+            {
+                if (cur.Validity)
+                    validCnt++;
+            }
 
-            long mult = treesA * treesB * treesC * treesD * treesE;
-
-            Console.WriteLine("The multiplicated answer is: "+ mult);
+            Console.WriteLine("{0} passports are valid", validCnt);
 
             Console.ReadLine();
         }
@@ -90,6 +78,35 @@ namespace adventOfCode
 
             return result;
         } 
+
+        public static List<Dictionary<string, string>> getDictionaryListFromStringList(List<string> strings)
+        {
+            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+
+            Dictionary<string, string> tmp = new Dictionary<string, string>();
+
+            for (int i = 0; i < strings.Count; i++)
+            {
+                if (strings[i] == "")
+                    continue;
+                
+                string[] pairs = strings[i].Split(' ');
+                
+                foreach(string pair in pairs)
+                {
+                    string[] keyValue = pair.Split(':');
+                    tmp.Add(keyValue[0], keyValue[1]);
+                }
+
+                if (i + 1 < strings.Count && strings[i + 1] == "")
+                {
+                    result.Add(tmp);
+                    tmp = new Dictionary<string, string>();
+                }
+            }
+
+            return result;
+        }
 
         public static List<PasswordTwo> getPasswordsFromInput(List<string> inputs)
         {
