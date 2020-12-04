@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace adventOfCode
 {
-    class Password
+    class PasswordOne
     {
         public int max;
         public char condition;
@@ -14,7 +14,7 @@ namespace adventOfCode
         public string password;
         public bool valid;
 
-        public Password(int min, int max, char condition, string password)
+        public PasswordOne(int min, int max, char condition, string password)
         {
             this.min = min;
             this.max = max;
@@ -41,6 +41,5 @@ namespace adventOfCode
                 valid = false;
             }
         }
-
     }
 }
