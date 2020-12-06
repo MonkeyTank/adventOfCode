@@ -22,17 +22,20 @@ namespace adventOfCode
 
             int[] ids = getIdList(inputArray, 127, 7);
 
-            int[,] fullIds = getFullIdList(127, 7);
+            int[] fullIds = getFullIdList(128, 8);
 
-            int maxID = 0;
+            int myId = 0;
 
-            for(int i = 0; i < ids.Length-1; i++)
+            for (int i = 1; i < fullIds.Length - 1; i++)
             {
-                if(maxID < Math.Max(ids[i], ids[i + 1]))
-                    maxID = Math.Max(ids[i], ids[i + 1]);            
-            }
+                if (!ids.Contains(fullIds[i]) && ids.Contains(fullIds[i-1]) && ids.Contains(fullIds[i+1]))
+                { 
+                    myId = fullIds[i];
+                    break;
+                }
+            }  
 
-            Console.WriteLine("The highest ID is {0}", maxID);
+            Console.WriteLine("My seat has the ID {0}", myId);
 
             Console.ReadLine();
         }
@@ -152,15 +155,17 @@ namespace adventOfCode
             return idList;
         }
 
-        public static int[,] getFullIdList(int rows, int cols)
+        public static int[] getFullIdList(int rows, int cols)
         {
-            int[,] result = new int[rows,cols];
+            int[] result = new int[rows*cols];
 
+            int n = 0;
             for(int i = 0; i < rows; i++)
             {
-                for(int k = 0; k < cols; k++)
+                for (int k = 0; k < cols; k++)
                 {
-                    result[i,k] = getId(i, k);
+                    result[n] = getId(i, k);
+                    n++;
                 }
             }
 
