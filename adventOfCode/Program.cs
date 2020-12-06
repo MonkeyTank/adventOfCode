@@ -11,31 +11,23 @@ namespace adventOfCode
     {
         static void Main(string[] args)
         {
-            //List<String> inputList;
-            string[] inputArray;
-            
-            int validCnt = 0;
+            List<String> inputList;
+            //string[] inputArray;
+            int yes = 0;
+           
 
-            StreamReader streamReader = new StreamReader(@"..\..\..\input\05.txt");
+            StreamReader streamReader = new StreamReader(@"..\..\..\input\06.txt");
 
-            getArrayFromTxt(streamReader, out inputArray);
+            getListFromTxt(streamReader, out inputList);
 
-            int[] ids = getIdList(inputArray, 127, 7);
+            List<List<char>> answers = getCharListOfInputList(inputList);
 
-            int[] fullIds = getFullIdList(128, 8);
-
-            int myId = 0;
-
-            for (int i = 1; i < fullIds.Length - 1; i++)
+            foreach(List<char> cur in answers)
             {
-                if (!ids.Contains(fullIds[i]) && ids.Contains(fullIds[i-1]) && ids.Contains(fullIds[i+1]))
-                { 
-                    myId = fullIds[i];
-                    break;
-                }
-            }  
+                yes += cur.Count();
+            }
 
-            Console.WriteLine("My seat has the ID {0}", myId);
+            Console.WriteLine("The sum of questions answered yes is {0}", yes);
 
             Console.ReadLine();
         }
@@ -105,6 +97,45 @@ namespace adventOfCode
                 }
             }
 
+            return result;
+        }
+
+        public static List<List<char>> getCharListOfInputList(List<string> inputList)
+        {
+            List<List<char>> result = new List<List<char>>();
+
+            List<char> answersOfOneGroup = new List<char>();
+
+            List<string> group = new List<string>();
+
+            for (int i = 0; i < inputList.Count; i++)
+            {
+                if (inputList[i] == "")
+                {
+                    result.Add(answersOfOneGroup);
+                    answersOfOneGroup = new List<char>();
+                    group = new List<string>();
+                    continue;
+                }
+
+                for (int k = i; k < inputList.Count && inputList[k] != ""; k++)
+                {
+                    group.Add(inputList[k]);
+                    i = k;
+                }                              
+
+                foreach(char cur in group[0])
+                {
+                    answersOfOneGroup.Add(cur);
+                    for(int k = 1; k < group.Count; k++)
+                    {
+                        if (!group[k].Contains(cur))
+                            answersOfOneGroup.Remove(cur);
+                    }
+                }
+            }
+
+            result.Add(answersOfOneGroup);
             return result;
         }
 
