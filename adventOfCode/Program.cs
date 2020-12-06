@@ -11,29 +11,16 @@ namespace adventOfCode
     {
         static void Main(string[] args)
         {
-            List<String> inputList;
-            //string[] inputArray;
-            List<Dictionary<string, string>> inputDicts;
+            //List<String> inputList;
+            string[] inputArray;
+            
             int validCnt = 0;
 
             StreamReader streamReader = new StreamReader(@"..\..\input\04.txt");
 
-            getListFromTxt(streamReader, out inputList);
+            getArrayFromTxt(streamReader, out inputArray);
 
-            inputDicts = getDictionaryListFromStringList(inputList);
-
-            List<Passport> passports = new List<Passport>();
-
-            foreach(Dictionary<string, string> cur in inputDicts)
-            {
-                passports.Add(new Passport(cur));
-            }
-
-            foreach(Passport cur in passports)
-            {
-                if (cur.Validity)
-                    validCnt++;
-            }
+            getIdList(inputArray, 128, 8);            
 
             Console.WriteLine("{0} passports are valid", validCnt);
 
@@ -141,5 +128,36 @@ namespace adventOfCode
             }
             return trees;
         }
+
+        public static List<int> getIdList(string[] inputArray, int maxRow, int maxCol)
+        {
+            List<int> idList = new List<int>();
+            foreach(string cur in inputArray)
+            {
+                int row = getRow(cur, maxRow);
+                int col = getCol(cur, maxCol);
+                idList.Add(getId(row, col));
+            }
+
+            return idList;
+        }
+
+        public static int getRow(string input, int maxRow)
+        {
+            return 1;
+        }
+
+        public static int getCol(string input, int maxCol)
+        {
+            return 1;
+        }
+
+        public static int getId(int row, int col)
+        {
+            return 1;
+        }
+        
+
+        
     }
 }
