@@ -16,13 +16,23 @@ namespace adventOfCode
             
             int validCnt = 0;
 
-            StreamReader streamReader = new StreamReader(@"..\..\input\04.txt");
+            StreamReader streamReader = new StreamReader(@"..\..\..\input\05.txt");
 
             getArrayFromTxt(streamReader, out inputArray);
 
-            getIdList(inputArray, 128, 8);            
+            int[] ids = getIdList(inputArray, 127, 7);
 
-            Console.WriteLine("{0} passports are valid", validCnt);
+            int[,] fullIds = getFullIdList(127, 7);
+
+            int maxID = 0;
+
+            for(int i = 0; i < ids.Length-1; i++)
+            {
+                if(maxID < Math.Max(ids[i], ids[i + 1]))
+                    maxID = Math.Max(ids[i], ids[i + 1]);            
+            }
+
+            Console.WriteLine("The highest ID is {0}", maxID);
 
             Console.ReadLine();
         }
@@ -129,35 +139,95 @@ namespace adventOfCode
             return trees;
         }
 
-        public static List<int> getIdList(string[] inputArray, int maxRow, int maxCol)
+        public static int[] getIdList(string[] inputArray, int maxRow, int maxCol)
         {
-            List<int> idList = new List<int>();
-            foreach(string cur in inputArray)
+            int[] idList = new int[inputArray.Length];
+            for(int i = 0; i < idList.Length; i++)
             {
-                int row = getRow(cur, maxRow);
-                int col = getCol(cur, maxCol);
-                idList.Add(getId(row, col));
+                int row = getRow(inputArray[i], maxRow);
+                int col = getCol(inputArray[i], maxCol);
+                idList[i] = getId(row, col);
             }
 
             return idList;
         }
 
+        public static int[,] getFullIdList(int rows, int cols)
+        {
+            int[,] result = new int[rows,cols];
+
+            for(int i = 0; i < rows; i++)
+            {
+                for(int k = 0; k < cols; k++)
+                {
+                    result[i,k] = getId(i, k);
+                }
+            }
+
+            return result;
+        }
+
         public static int getRow(string input, int maxRow)
         {
-            return 1;
+            int minRow = 0;            
+            double halves = Math.Log2(maxRow + 1);
+
+            for(int i = 0; i < halves; i++)
+            {
+                switch (input[i])
+                {
+                    case 'B':
+                        if (i == halves - 1)
+                            return maxRow;
+                        
+                        minRow += ((maxRow - minRow) / 2) + 1;
+                        break;
+                        
+                    case 'F':
+                        if (i == halves - 1)
+                            return minRow;                            
+                                            
+                        maxRow -= ((maxRow - minRow) / 2) + 1;
+                        break;
+                        
+                }                
+            }
+            return -1;
         }
 
         public static int getCol(string input, int maxCol)
         {
-            return 1;
+            int minCol = 0;
+            double halves = Math.Log2(maxCol + 1);
+
+            for (int i = input.Length - (int) halves; i < input.Length; i++)
+            {
+                switch (input[i])
+                {
+                    case 'R':
+                        if(i == input.Length - 1)
+                        {
+                            return maxCol;
+                        }
+                        minCol += ((maxCol - minCol) / 2) + 1;
+                        break;
+                    case 'L':
+                        if(i == input.Length - 1)
+                        {
+                            return minCol;
+                        }
+                        maxCol -= ((maxCol - minCol) / 2) + 1;
+                        break;
+                }
+            }
+
+            return -1;
         }
 
         public static int getId(int row, int col)
         {
-            return 1;
+            return row * 8 + col;
         }
-        
-
         
     }
 }
